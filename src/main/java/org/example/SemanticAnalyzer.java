@@ -131,6 +131,60 @@ public class SemanticAnalyzer extends MiniLangBaseVisitor<Tipo> {
         return Tipo.BOOL;
     }
 
+    @Override
+    public Tipo visitAndExpr(MiniLangParser.AndExprContext ctx) {
+        Tipo left = visit(ctx.expr(0));
+        Tipo right = visit(ctx.expr(1));
+        if (left != Tipo.BOOL || right != Tipo.BOOL) {
+            throw new RuntimeException("Error semántico: operandos de '&' deben ser booleanos");
+        }
+        return Tipo.BOOL;
+    }
+
+    @Override
+    public Tipo visitOrExpr(MiniLangParser.OrExprContext ctx) {
+        Tipo left = visit(ctx.expr(0));
+        Tipo right = visit(ctx.expr(1));
+        if (left != Tipo.BOOL || right != Tipo.BOOL) {
+            throw new RuntimeException("Error semántico: operandos de '|' deben ser booleanos");
+        }
+        return Tipo.BOOL;
+    }
+
+    @Override
+    public Tipo visitNotExpr(MiniLangParser.NotExprContext ctx) {
+        Tipo tipo = visit(ctx.expr());
+        if (tipo != Tipo.BOOL) {
+            throw new RuntimeException("Error semántico: operando de '!' debe ser booleano");
+        }
+        return Tipo.BOOL;
+    }
+
+    @Override
+    public Tipo visitParenExpr(MiniLangParser.ParenExprContext ctx) {
+        return visit(ctx.expr());
+    }
+
+    @Override
+    public Tipo visitIntLiteral(MiniLangParser.IntLiteralContext ctx) {
+        return Tipo.INT;
+    }
+
+    @Override
+    public Tipo visitFloatLiteral(MiniLangParser.FloatLiteralContext ctx) {
+        return Tipo.FLOAT;
+    }
+
+    @Override
+    public Tipo visitBoolLiteral(MiniLangParser.BoolLiteralContext ctx) {
+        return Tipo.BOOL;
+    }
+
+    @Override
+    public Tipo visitStringLiteral(MiniLangParser.StringLiteralContext ctx) {
+        return Tipo.STRING;
+    }
+
     // Private Helpers
 
     private boolean esNumerico(Tipo t) {
