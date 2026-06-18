@@ -8,6 +8,8 @@ public class SemanticAnalyzer extends MiniLangBaseVisitor<Tipo> {
         this.tabla = tabla;
     }
 
+    // STATEMENTS
+
     @Override
     public Tipo visitVarDecl(MiniLangParser.VarDeclContext ctx) {
         String nombre = ctx.ID().getText();
@@ -21,15 +23,6 @@ public class SemanticAnalyzer extends MiniLangBaseVisitor<Tipo> {
         }
         tabla.definir(nombre, tipoDeclarado);
         return tipoDeclarado;
-    }
-
-    @Override
-    public Tipo visitVarRef(MiniLangParser.VarRefContext ctx) {
-        String nombre = ctx.ID().getText();
-        if (!tabla.existe(nombre)) {
-            throw new RuntimeException("Error semántico: variable '" + nombre + "' no declarada");
-        }
-        return tabla.obtenerTipo(nombre);
     }
 
     @Override
@@ -76,6 +69,8 @@ public class SemanticAnalyzer extends MiniLangBaseVisitor<Tipo> {
         return null;
     }
 
+    // TIPO
+
     @Override
     public Tipo visitTipo(MiniLangParser.TipoContext ctx) {
         if (ctx.T_ENTERO() != null) return Tipo.INT;
@@ -83,6 +78,22 @@ public class SemanticAnalyzer extends MiniLangBaseVisitor<Tipo> {
         if (ctx.T_BOOL() != null) return Tipo.BOOL;
         if (ctx.T_TEXTO() != null) return Tipo.STRING;
         return null;
+    }
+
+    // EXPRESIONES (orden de precedencia)
+
+    @Override
+    public Tipo visitParenExpr(MiniLangParser.ParenExprContext ctx) {
+        return visit(ctx.expr());
+    }
+
+    @Override
+    public Tipo visitNotExpr(MiniLangParser.NotExprContext ctx) {
+        Tipo tipo = visit(ctx.expr());
+        if (tipo != Tipo.BOOL) {
+            throw new RuntimeException("Error semántico: operando de '!' debe ser booleano");
+        }
+        return Tipo.BOOL;
     }
 
     @Override
@@ -152,20 +163,6 @@ public class SemanticAnalyzer extends MiniLangBaseVisitor<Tipo> {
     }
 
     @Override
-    public Tipo visitNotExpr(MiniLangParser.NotExprContext ctx) {
-        Tipo tipo = visit(ctx.expr());
-        if (tipo != Tipo.BOOL) {
-            throw new RuntimeException("Error semántico: operando de '!' debe ser booleano");
-        }
-        return Tipo.BOOL;
-    }
-
-    @Override
-    public Tipo visitParenExpr(MiniLangParser.ParenExprContext ctx) {
-        return visit(ctx.expr());
-    }
-
-    @Override
     public Tipo visitIntLiteral(MiniLangParser.IntLiteralContext ctx) {
         return Tipo.INT;
     }
@@ -185,7 +182,16 @@ public class SemanticAnalyzer extends MiniLangBaseVisitor<Tipo> {
         return Tipo.STRING;
     }
 
-    // Private Helpers
+    @Override
+    public Tipo visitVarRef(MiniLangParser.VarRefContext ctx) {
+        String nombre = ctx.ID().getText();
+        if (!tabla.existe(nombre)) {
+            throw new RuntimeException("Error semántico: variable '" + nombre + "' no declarada");
+        }
+        return tabla.obtenerTipo(nombre);
+    }
+
+    // HELPERS
 
     private boolean esNumerico(Tipo t) {
         return t == Tipo.INT || t == Tipo.FLOAT;
