@@ -111,6 +111,26 @@ public class SemanticAnalyzer extends MiniLangBaseVisitor<Tipo> {
         return promocionarTipo(left, right);
     }
 
+    @Override
+    public Tipo visitRelExpr(MiniLangParser.RelExprContext ctx) {
+        Tipo left = visit(ctx.expr(0));
+        Tipo right = visit(ctx.expr(1));
+        if (!esNumerico(left) || !esNumerico(right)) {
+            throw new RuntimeException("Error semántico: operandos relacionales deben ser numéricos");
+        }
+        return Tipo.BOOL;
+    }
+
+    @Override
+    public Tipo visitIgualdadExpr(MiniLangParser.IgualdadExprContext ctx) {
+        Tipo left = visit(ctx.expr(0));
+        Tipo right = visit(ctx.expr(1));
+        if (left != right) {
+            throw new RuntimeException("Error semántico: tipos incompatibles en comparación");
+        }
+        return Tipo.BOOL;
+    }
+
     // Private Helpers
 
     private boolean esNumerico(Tipo t) {
