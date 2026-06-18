@@ -64,7 +64,7 @@ WS         : [ \t\r\n]+ -> skip;
 
 // 2. REGLAS SINTÁCTICAS (PARSER) — minúsculas
 
-programa : instruccion* EOF ;
+programa: instruccion* EOF ;
 
 instruccion
     : varDecl
@@ -86,9 +86,17 @@ tipo
     ;
 
 expr
-    : NUM_ENT   # intLiteral
-    | NUM_REAL  # floatLiteral
-    | BOOLEANO  # boolLiteral
-    | TEXTO     # stringLiteral
-    | ID        # varRef
+    : PAR_A expr PAR_C                                          # parenExpr
+    | NOT expr                                                  # notExpr
+    | expr op=(MULT | DIV) expr                                 # mulDivExpr
+    | expr op=(SUM | RES) expr                                  # sumResExpr
+    | expr op=(MAYOR | MENOR | MAYOR_IGUAL | MENOR_IGUAL) expr  # relExpr
+    | expr op=(IGUALDAD | DISTINTO) expr                        # igualdadExpr
+    | expr AND expr                                             # andExpr
+    | expr OR expr                                              # orExpr
+    | NUM_ENT                                                   # intLiteral
+    | NUM_REAL                                                  # floatLiteral
+    | BOOLEANO                                                  # boolLiteral
+    | TEXTO                                                     # stringLiteral
+    | ID                                                        # varRef
     ;
