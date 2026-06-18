@@ -11,10 +11,16 @@ PROGRAM : 'programa';
 VAR     : 'var';
 PRINTLN : 'mostrar';
 
+// TIPOS DE DATOS
+T_ENTERO   : 'entero';
+T_FLOTANTE : 'flotante';
+T_BOOL     : 'bool';
+T_TEXTO    : 'texto';
+
 // OPERADORES ARITMÉTICOS
-SUM : '+';
-RES : '-';
-DIV : '/';
+SUM  : '+';
+RES  : '-';
+DIV  : '/';
 MULT : '*';
 
 // OPERADORES LÓGICOS
@@ -31,12 +37,13 @@ IGUALDAD    : '==';
 DISTINTO    : '!=';
 
 // SÍMBOLOS ESTRUCTURALES
-PAR_A    : '(';
-PAR_C    : ')';
-LLA_A    : '{';
-LLA_C    : '}';
-PNT_COMA : ';';
-ASIGNAR  : '=';
+PAR_A       : '(';
+PAR_C       : ')';
+LLA_A       : '{';
+LLA_C       : '}';
+PNT_COMA    : ';';
+DOS_PUNTOS  : ':';
+ASIGNAR     : '=';
 
 // NUMERALES
 NUM_REAL : [0-9]+'.'[0-9]+;
@@ -44,6 +51,9 @@ NUM_ENT  : [0-9]+;
 
 // IDENTIFICADOR
 ID : [a-zA-Z_][a-zA-Z0-9_]*;
+
+// BOOLEANOS
+BOOLEANO : 'true' | 'false';
 
 // CADENAS
 TEXTO : '"' (~["\r\n])* '"';
@@ -56,4 +66,29 @@ WS         : [ \t\r\n]+ -> skip;
 
 programa : instruccion* EOF ;
 
-instruccion : PRINTLN ID PNT_COMA ;
+instruccion
+    : varDecl
+    | asignacion
+    | printlnStmt
+    ;
+
+varDecl : VAR ID DOS_PUNTOS tipo ASIGNAR expr PNT_COMA ;
+
+asignacion : ID ASIGNAR expr PNT_COMA ;
+
+printlnStmt : PRINTLN expr PNT_COMA ;
+
+tipo
+    : T_ENTERO
+    | T_FLOTANTE
+    | T_BOOL
+    | T_TEXTO
+    ;
+
+expr
+    : NUM_ENT   # intLiteral
+    | NUM_REAL  # floatLiteral
+    | BOOLEANO  # boolLiteral
+    | TEXTO     # stringLiteral
+    | ID        # varRef
+    ;
