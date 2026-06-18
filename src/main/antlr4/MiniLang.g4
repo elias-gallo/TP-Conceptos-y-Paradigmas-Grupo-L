@@ -9,7 +9,11 @@ package org.example;
 // PALABRAS CLAVE
 PROGRAM : 'programa';
 VAR     : 'var';
-PRINTLN : 'mostrar';
+PRINTLN : 'print';
+IF      : 'if';
+ELSE    : 'else';
+REPEAT  : 'repeat';
+UNTIL   : 'until';
 
 // TIPOS DE DATOS
 T_ENTERO   : 'entero';
@@ -70,6 +74,8 @@ instruccion
     : varDecl
     | asignacion
     | printlnStmt
+    | ifStmt
+    | repeatStmt
     ;
 
 varDecl : VAR ID DOS_PUNTOS tipo ASIGNAR expr PNT_COMA ;
@@ -77,6 +83,16 @@ varDecl : VAR ID DOS_PUNTOS tipo ASIGNAR expr PNT_COMA ;
 asignacion : ID ASIGNAR expr PNT_COMA ;
 
 printlnStmt : PRINTLN expr PNT_COMA ;
+
+ifStmt
+    : IF PAR_A expr PAR_C LLA_A instruccion* LLA_C
+      (ELSE LLA_A instruccion* LLA_C)?
+    ;
+
+repeatStmt
+    : REPEAT LLA_A instruccion* LLA_C
+      UNTIL PAR_A expr PAR_C PNT_COMA
+    ;
 
 tipo
     : T_ENTERO
