@@ -84,4 +84,51 @@ public class SemanticAnalyzer extends MiniLangBaseVisitor<Tipo> {
         if (ctx.T_TEXTO() != null) return Tipo.STRING;
         return null;
     }
+
+    @Override
+    public Tipo visitMulDivExpr(MiniLangParser.MulDivExprContext ctx) {
+        Tipo left = visit(ctx.expr(0));
+        Tipo right = visit(ctx.expr(1));
+        if (!esNumerico(left) || !esNumerico(right)) {
+            throw new RuntimeException("Error semántico: operandos deben ser numéricos");
+        }
+        if (ctx.DIV() != null) {
+            Object valRight = obtenerLiteral(ctx.expr(1));
+            if (valRight instanceof Integer && (Integer) valRight == 0) {
+                throw new RuntimeException("Error semántico: división por cero");
+            }
+        }
+        return promocionarTipo(left, right);
+    }
+
+    @Override
+    public Tipo visitSumResExpr(MiniLangParser.SumResExprContext ctx) {
+        Tipo left = visit(ctx.expr(0));
+        Tipo right = visit(ctx.expr(1));
+        if (!esNumerico(left) || !esNumerico(right)) {
+            throw new RuntimeException("Error semántico: operandos deben ser numéricos");
+        }
+        return promocionarTipo(left, right);
+    }
+
+    // Private Helpers
+
+    private boolean esNumerico(Tipo t) {
+        return t == Tipo.INT || t == Tipo.FLOAT;
+    }
+
+    private Tipo promocionarTipo(Tipo a, Tipo b) {
+        if (a == Tipo.FLOAT || b == Tipo.FLOAT) return Tipo.FLOAT;
+        return Tipo.INT;
+    }
+
+    private Object obtenerLiteral(MiniLangParser.ExprContext ctx) {
+        if (ctx instanceof MiniLangParser.IntLiteralContext) {
+            return Integer.valueOf(ctx.getText());
+        }
+        if (ctx instanceof MiniLangParser.FloatLiteralContext) {
+            return Double.valueOf(ctx.getText());
+        }
+        return null;
+    }
 }
