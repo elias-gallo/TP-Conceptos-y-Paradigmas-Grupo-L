@@ -4,57 +4,56 @@ grammar MiniLang;
 package org.example;
 }
 
-//REGLAS SINTÁCTICAS
-programa : instruccion* EOF ;
+// 1. REGLAS LÉXICAS (LEXER) — MAYÚSCULAS
 
-
-instruccion : PRINTLN ID PNT_COMA ;
-
-
-//REGLAS LÉXICAS o TOKENS (en mayúscula)
-
-//PALABRAS CLAVE
+// PALABRAS CLAVE
 PROGRAM : 'programa';
 VAR     : 'var';
 PRINTLN : 'mostrar';
 
-//OPERADOR ARITMÉTICOS
+// OPERADORES ARITMÉTICOS
 SUM : '+';
 RES : '-';
 DIV : '/';
 MULT : '*';
 
-//OPERADORES LÓGICOS
+// OPERADORES LÓGICOS
 AND : '&';
-OR : '|';
+OR  : '|';
 NOT : '!';
 
-//OPERADORES RELACIONALES
+// OPERADORES RELACIONALES
 MAYOR       : '>';
 MENOR       : '<';
 MAYOR_IGUAL : '>=';
 MENOR_IGUAL : '<=';
-IGUALDAD    : '=='; // '=' es para asignación
+IGUALDAD    : '==';
 DISTINTO    : '!=';
 
 // SÍMBOLOS ESTRUCTURALES
-PAR_A   : '(';
-PAR_C   : ')';
-LLA_A   : '{';
-LLA_C   : '}';
+PAR_A    : '(';
+PAR_C    : ')';
+LLA_A    : '{';
+LLA_C    : '}';
 PNT_COMA : ';';
-ASIGNAR : '=';
+ASIGNAR  : '=';
 
-//NUMERALES
+// NUMERALES
 NUM_REAL : [0-9]+'.'[0-9]+;
-NUM_ENT : [0-9]+;
+NUM_ENT  : [0-9]+;
 
-//IDENTIFICADOR
+// IDENTIFICADOR
 ID : [a-zA-Z_][a-zA-Z0-9_]*;
 
-//CADENAS
-TEXTO     : '"' (~["\r\n])* '"';
-COMENTARIO : '//' ~[\r\n]* -> skip; // ~ -> excepto
+// CADENAS
+TEXTO : '"' (~["\r\n])* '"';
 
-//ESPACIOS EN BLANCO
-WS : [ \t\r\n]+ -> skip;
+// DESCARTABLES
+COMENTARIO : '//' ~[\r\n]* -> skip;
+WS         : [ \t\r\n]+ -> skip;
+
+// 2. REGLAS SINTÁCTICAS (PARSER) — minúsculas
+
+programa : instruccion* EOF ;
+
+instruccion : PRINTLN ID PNT_COMA ;
