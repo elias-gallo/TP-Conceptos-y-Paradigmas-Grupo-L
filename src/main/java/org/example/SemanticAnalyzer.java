@@ -51,7 +51,10 @@ public class SemanticAnalyzer extends MiniLangBaseVisitor<Tipo> {
         if (tipoCond != Tipo.BOOL) {
             throw new RuntimeException("Error semántico: la condición del 'if' debe ser booleana");
         }
-        for (var instr : ctx.instruccion()) {
+        for (var instr : ctx.ifBody) {
+            visit(instr);
+        }
+        for (var instr : ctx.elseBody) {
             visit(instr);
         }
         return null;

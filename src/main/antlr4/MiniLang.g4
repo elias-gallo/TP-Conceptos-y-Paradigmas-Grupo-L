@@ -85,8 +85,8 @@ asignacion : ID ASIGNAR expr PNT_COMA ;
 printlnStmt : PRINTLN expr PNT_COMA ;
 
 ifStmt
-    : IF PAR_A expr PAR_C LLA_A instruccion* LLA_C
-      (ELSE LLA_A instruccion* LLA_C)?
+    : IF PAR_A expr PAR_C LLA_A ifBody+=instruccion* LLA_C
+      (ELSE LLA_A elseBody+=instruccion* LLA_C)?
     ;
 
 repeatStmt
