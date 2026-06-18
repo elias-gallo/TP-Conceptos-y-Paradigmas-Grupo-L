@@ -45,4 +45,43 @@ public class SemanticAnalyzer extends MiniLangBaseVisitor<Tipo> {
         }
         return tipoVar;
     }
+
+    @Override
+    public Tipo visitPrintlnStmt(MiniLangParser.PrintlnStmtContext ctx) {
+        visit(ctx.expr());
+        return null;
+    }
+
+    @Override
+    public Tipo visitIfStmt(MiniLangParser.IfStmtContext ctx) {
+        Tipo tipoCond = visit(ctx.expr());
+        if (tipoCond != Tipo.BOOL) {
+            throw new RuntimeException("Error semántico: la condición del 'if' debe ser booleana");
+        }
+        for (var instr : ctx.instruccion()) {
+            visit(instr);
+        }
+        return null;
+    }
+
+    @Override
+    public Tipo visitRepeatStmt(MiniLangParser.RepeatStmtContext ctx) {
+        for (var instr : ctx.instruccion()) {
+            visit(instr);
+        }
+        Tipo tipoCond = visit(ctx.expr());
+        if (tipoCond != Tipo.BOOL) {
+            throw new RuntimeException("Error semántico: la condición del 'until' debe ser booleana");
+        }
+        return null;
+    }
+
+    @Override
+    public Tipo visitTipo(MiniLangParser.TipoContext ctx) {
+        if (ctx.T_ENTERO() != null) return Tipo.INT;
+        if (ctx.T_FLOTANTE() != null) return Tipo.FLOAT;
+        if (ctx.T_BOOL() != null) return Tipo.BOOL;
+        if (ctx.T_TEXTO() != null) return Tipo.STRING;
+        return null;
+    }
 }
