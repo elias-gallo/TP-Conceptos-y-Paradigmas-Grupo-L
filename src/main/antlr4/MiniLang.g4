@@ -53,11 +53,11 @@ ASIGNAR     : '=';
 NUM_REAL : [0-9]+'.'[0-9]+;
 NUM_ENT  : [0-9]+;
 
-// IDENTIFICADOR
-ID : [a-zA-Z_][a-zA-Z0-9_]*;
-
 // BOOLEANOS
 BOOLEANO : 'true' | 'false';
+
+// IDENTIFICADOR
+ID : [a-zA-Z_][a-zA-Z0-9_]*;
 
 // CADENAS
 TEXTO : '"' (~["\r\n])* '"';
