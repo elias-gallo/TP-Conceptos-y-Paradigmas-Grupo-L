@@ -27,15 +27,7 @@ public class Interpreter extends MiniLangBaseVisitor<Object> {
     @Override
     public Object visitPrintlnStmt(MiniLangParser.PrintlnStmtContext ctx) {
         Object valor = visit(ctx.expr());
-        if (valor instanceof Double) {
-            if ((Double) valor == Math.floor((Double) valor)) {
-                System.out.println((Double) valor);
-            } else {
-                System.out.println(valor);
-            }
-        } else {
-            System.out.println(valor);
-        }
+        System.out.println(valor);
         return null;
     }
 
@@ -68,9 +60,12 @@ public class Interpreter extends MiniLangBaseVisitor<Object> {
     public Object visitMulDivExpr(MiniLangParser.MulDivExprContext ctx) {
         Object left = visit(ctx.expr(0));
         Object right = visit(ctx.expr(1));
+        String op = ctx.op.getText();
+        if (op.equals("*") && left instanceof Integer && right instanceof Integer) {
+            return (Integer) left * (Integer) right;
+        }
         double a = ((Number) left).doubleValue();
         double b = ((Number) right).doubleValue();
-        String op = ctx.op.getText();
         return switch (op) {
             case "*" -> a * b;
             case "/" -> a / b;
@@ -82,9 +77,18 @@ public class Interpreter extends MiniLangBaseVisitor<Object> {
     public Object visitSumResExpr(MiniLangParser.SumResExprContext ctx) {
         Object left = visit(ctx.expr(0));
         Object right = visit(ctx.expr(1));
+        String op = ctx.op.getText();
+        if (left instanceof Integer && right instanceof Integer) {
+            int a = (Integer) left;
+            int b = (Integer) right;
+            return switch (op) {
+                case "+" -> a + b;
+                case "-" -> a - b;
+                default -> throw new RuntimeException("Operador desconocido: " + op);
+            };
+        }
         double a = ((Number) left).doubleValue();
         double b = ((Number) right).doubleValue();
-        String op = ctx.op.getText();
         return switch (op) {
             case "+" -> a + b;
             case "-" -> a - b;
