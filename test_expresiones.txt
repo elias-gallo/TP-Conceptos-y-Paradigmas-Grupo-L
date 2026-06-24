@@ -1,0 +1,5 @@
+var calculo : flotante = (10.0 + 5.5) * 2.0;
+print calculo;
+
+var chequeo : bool = (10 > 5) & (2.0 == 2.0);
+print chequeo;

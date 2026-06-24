@@ -1,0 +1,5 @@
+var mensaje : texto = "Prueba para la defensa del trabajo";
+print mensaje;
+
+var nombre : texto = "Elias";
+print nombre;

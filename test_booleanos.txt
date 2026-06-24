@@ -1,0 +1,11 @@
+var verdadero : bool = true;
+var falso : bool = false;
+
+var resultadoAnd : bool = verdadero & falso;
+print resultadoAnd;
+
+var resultadoOr : bool = verdadero | falso;
+print resultadoOr;
+
+var resultadoNot : bool = !falso;
+print resultadoNot;

@@ -1,0 +1,5 @@
+//var edad : entero = 25;
+//edad = "veinticinco"; Error Semántico: No se puede asignar texto a un entero
+
+var control : bool = true;
+var control : entero = 10; // Error Semántico: Variable 'control' ya declarada

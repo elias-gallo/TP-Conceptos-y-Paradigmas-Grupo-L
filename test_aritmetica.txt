@@ -1,0 +1,7 @@
+var x : entero = 20;
+var y : entero  = 10;
+print x + y;
+print x - y;
+print x * y;
+print x / y;
+

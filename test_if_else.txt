@@ -1,0 +1,6 @@
+var condicion : bool = false;
+if (condicion) {
+    print "Entró al if";
+    } else {
+        print "Entró al else";
+    }

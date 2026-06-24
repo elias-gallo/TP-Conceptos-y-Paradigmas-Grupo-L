@@ -1,0 +1,13 @@
+var a : entero = 15;
+var b : entero = 20;
+
+var esMayor : bool = a > b;
+print esMayor;
+
+print a < b;
+
+var esIgual : bool = a == b;
+print esIgual;
+
+var esDistinto : bool = a != b;
+print esDistinto;
