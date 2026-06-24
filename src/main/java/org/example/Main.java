@@ -3,8 +3,7 @@ package org.example;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
-import org.example.MiniLangLexer;
-import org.example.MiniLangParser;
+
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -28,7 +27,7 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         int opcion = -1;
 
-        while (opcion != 0) {
+        while (true) {
             System.out.println("\n========================================");
             System.out.println("      MENÚ DE PRUEBAS - COMPILADOR      ");
             System.out.println("========================================");
@@ -51,7 +50,7 @@ public class Main {
                 break;
             }
 
-            // opcion dentro de los limites
+            // Opción dentro de los límites
             if (opcion > 0 && opcion <= OPCIONES.length) {
                 String archivoElegido = OPCIONES[opcion - 1];
                 System.out.println("\n--- Leyendo archivo '" + archivoElegido + "' ---");
@@ -65,23 +64,24 @@ public class Main {
         }
         scanner.close();
     }
-        private static void ejecutarCompilador(String entrada){
+
+    private static void ejecutarCompilador(String entrada) {
         try {
-            // parseo sintactico
+            // Parseo Sintáctico
             MiniLangLexer lexer = new MiniLangLexer(CharStreams.fromFileName(entrada));
             CommonTokenStream tokens = new CommonTokenStream(lexer);
             MiniLangParser parser = new MiniLangParser(tokens);
 
-            // arbol
+            // Árbol
             ParseTree tree = parser.programa();
 
-            // analisis semántico
+            // Analizador Semántico
             SymbolTable tablaSimbolos = new SymbolTable();
-            SemanticAnalyzer analizadoSemantico = new SemanticAnalyzer(tablaSimbolos);
-            analizadoSemantico.visit(tree);
+            SemanticAnalyzer analizadorSemantico = new SemanticAnalyzer(tablaSimbolos);
+            analizadorSemantico.visit(tree);
 
 
-            // interprete
+            // Intérprete
             Interpreter interprete = new Interpreter(tablaSimbolos);
             interprete.visit(tree);
 
@@ -90,5 +90,5 @@ public class Main {
         } catch (IOException e) {
             System.err.println("\n[ERROR]: No se pudo leer el archivo " + entrada);
         }
-        }
+    }
 }
