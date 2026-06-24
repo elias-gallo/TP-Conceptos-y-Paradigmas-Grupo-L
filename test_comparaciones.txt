@@ -1,3 +1,5 @@
+// Salida esperada: false, true, false, true
+
 var a : entero = 15;
 var b : entero = 20;
 

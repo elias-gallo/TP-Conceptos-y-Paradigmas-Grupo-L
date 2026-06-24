@@ -1,3 +1,3 @@
-//x = 50; 'x' no ha sido declarada
+// Salida esperada: Error semántico: variable 'y' no declarada
 
-var resultado : entero = 10 + y; //'y' no ha sido declarada
+var resultado : entero = 10 + y;

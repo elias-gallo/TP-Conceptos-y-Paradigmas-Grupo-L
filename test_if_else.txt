@@ -1,6 +1,8 @@
+// Salida esperada: Entró al else
+
 var condicion : bool = false;
 if (condicion) {
     print "Entró al if";
-    } else {
-        print "Entró al else";
-    }
+ } else {
+    print "Entró al else";
+}

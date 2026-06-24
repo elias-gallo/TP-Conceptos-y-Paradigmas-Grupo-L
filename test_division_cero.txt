@@ -1,3 +1,5 @@
+// Salida esperada: Error semántico: división por cero
+
 var numerador : entero = 100;
-var division : entero = numerador / 0; //Error: División por cero
+var division : entero = numerador / 0; // Error: División por cero
 print division;

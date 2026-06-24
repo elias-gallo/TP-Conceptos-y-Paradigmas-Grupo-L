@@ -1,5 +1,7 @@
+// Salida esperada: 1, 2, 3
+
 var i : entero = 0;
 repeat {
-   i = i + 1;
-   print i;
- } until (i == 3);
+    i = i + 1;
+    print i;
+} until (i == 3);
